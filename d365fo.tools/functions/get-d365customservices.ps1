@@ -1,4 +1,4 @@
-﻿param (
+param (
         [Parameter(Mandatory = $true)]
         [string] $tenant,
 
@@ -12,6 +12,8 @@
         [string] $clientSecret,
 
         [string] $serviceGroupFilter,
+
+        [switch] $OutputAsCSV,
 
         [switch] $OutputAsJson
     )
@@ -49,9 +51,13 @@ if ($authorized)
 {
     $apiUrl = $resource + "/api/services/"
     
-    if (-not $OutputAsJson)
+    if ($OutputAsCSV)
     {
         "Service group,Service,Method,Service response,Input parameters"
+    }
+    elseif (-not $OutputAsJson)
+    {
+        $outputArray =@()
     }
 
     foreach($serviceGroup in $serviceGroups.ServiceGroups | Sort-Object Name)
@@ -81,17 +87,28 @@ if ($authorized)
                         $parameterString += ";"
                     }
 
-                    $parameterString += "[" + $parameter.Type + "]" + $parameter.Name 
+                    $parameterString += "[" + $parameter.Type + "]:" + $parameter.Name 
                 }
 
-                if (-not $OutputAsJson)
+                if ($OutputAsCSV)
                 {
-                    $serviceGroup.Name + "," + $service.Name + "," + $method.Name + ",[" + $serviceMethodResponse.Return.Type + "]" + $serviceMethodResponse.Return.Name + "," + $parameterString
+                    $serviceGroup.Name + "," + $service.Name + "," + $method.Name + ",[" + $serviceMethodResponse.Return.Type + "]:" + $serviceMethodResponse.Return.Name + "," + $parameterString
+                }
+                elseif (-not $OutputAsJson)
+                {
+                    $outputRow = "" | Select ServiceGroup, Service, Operation, Response, InputParameters
+                    $outputRow.serviceGroup = $serviceGroup.Name
+                    $outputRow.Service = $service.Name
+                    $outputRow.Operation = $method.Name
+                    $outputRow.Response = "[" + $serviceMethodResponse.Return.Type + "]:" + $serviceMethodResponse.Return.Name
+                    $outputRow.InputParameters = $parameterString
+                    
+                    $outputArray += $outputRow
                 }
 
                 $methodObject += @{
                                     $method.Name  = @{
-                                        Response = "[" + $serviceMethodResponse.Return.Type + "]" + $serviceMethodResponse.Return.Name
+                                        Response = "[" + $serviceMethodResponse.Return.Type + "]:" + $serviceMethodResponse.Return.Name
                                         InputParameters = $parameterString
                                         }
                                     }
@@ -106,5 +123,9 @@ if ($authorized)
     if ($OutputAsJson)
     {
         $serviceGroupObject | ConvertTo-Json -Depth 10
+    }
+    elseif(-not $OutputAsCSV)
+    {
+        $outputArray
     }
 }
