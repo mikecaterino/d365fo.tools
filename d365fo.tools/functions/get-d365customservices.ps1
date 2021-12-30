@@ -53,7 +53,7 @@ if ($authorized)
     
     if ($OutputAsCSV)
     {
-        "Service group,Service,Method,Service response,Input parameters"
+        "Service group,Service,Operation,Response,Input parameters"
     }
     elseif (-not $OutputAsJson)
     {
@@ -76,8 +76,14 @@ if ($authorized)
             {
                 $methodURL = $serviceURL + "/" + $method.Name
                 
-                $serviceMethodResponse = Invoke-RestMethod $methodURL -Method 'GET' -Headers $headers
-
+                try
+                {
+                    $serviceMethodResponse = Invoke-RestMethod $methodURL -Method 'GET' -Headers $headers
+                }
+                catch
+                {
+                    #DoNothing. It's an endpoint that doesn't have a return value.
+                }
                 $parameterString = ""
 
                 foreach($parameter in $serviceMethodResponse.Parameters)
