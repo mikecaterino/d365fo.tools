@@ -1,10 +1,3 @@
-﻿---
-external help file: d365fo.tools-help.xml
-Module Name: d365fo.tools
-online version:
-schema: 2.0.0
----
-
 # Get-D365CustomServices
 
 ## SYNOPSIS
@@ -14,7 +7,7 @@ Get list of custom services
 
 ```
 Get-D365CustomServices [[-tenant] <String> [-resource] <String> [-clientId] <String>
- [-clientSecret] <String> [-serviceGroupFilter] <String> [-OutputAsJson] [<CommonParameters>]
+ [-clientSecret] <String> [-serviceGroupFilter] <String> [-OutputAsJson] [-OutputAsCSV] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -141,6 +134,21 @@ Accept wildcard characters: True
 
 ### -OutputAsJson
 Instructs the cmdlet to convert the output to a Json string
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -OutputAsCsv
+Instructs the cmdlet to convert the output to a CSV formatted output
 
 ```yaml
 Type: SwitchParameter
