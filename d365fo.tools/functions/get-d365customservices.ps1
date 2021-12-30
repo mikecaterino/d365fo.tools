@@ -81,17 +81,17 @@ if ($authorized)
                         $parameterString += ";"
                     }
 
-                    $parameterString += "[" + $parameter.Type + "]:" + $parameter.Name 
+                    $parameterString += "[" + $parameter.Type + "]" + $parameter.Name 
                 }
 
                 if (-not $OutputAsJson)
                 {
-                    $serviceGroup.Name + "," + $service.Name + "," + $method.Name + ",[" + $serviceMethodResponse.Return.Type + "]:" + $serviceMethodResponse.Return.Name + "," + $parameterString
+                    $serviceGroup.Name + "," + $service.Name + "," + $method.Name + ",[" + $serviceMethodResponse.Return.Type + "]" + $serviceMethodResponse.Return.Name + "," + $parameterString
                 }
 
                 $methodObject += @{
                                     $method.Name  = @{
-                                        Response = "[" + $serviceMethodResponse.Return.Type + "]:" + $serviceMethodResponse.Return.Name
+                                        Response = "[" + $serviceMethodResponse.Return.Type + "]" + $serviceMethodResponse.Return.Name
                                         InputParameters = $parameterString
                                         }
                                     }
