@@ -171,7 +171,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ### System.String
 ## NOTES
-Tags: DMF, OData, RestApi, Data Management Framework
+Tags: RestApi
 
 Author: Mike Caterino (@MikeCaterino)
 
